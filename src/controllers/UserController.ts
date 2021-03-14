@@ -1,5 +1,6 @@
 import { Request, response, Response } from "express";
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository} from "typeorm";
+import { SoftDeleteQueryBuilder } from "typeorm/query-builder/SoftDeleteQueryBuilder";
 import { UsersRepository } from "../repositories/UsersRepository";
 
 class UserController {
@@ -24,6 +25,36 @@ class UserController {
         await usersRepository.save(user);
         return res.json(user);
     }
+
+    async show(req: Request, res: Response) {
+        // const { name, crm, telephone, cellphone, cep, specialty } = req.body;
+
+        const usersRepository = getCustomRepository(UsersRepository);
+
+        const users = await usersRepository.find();
+        return res.json(users);
+    }
+
+    async showId (req: Request, res: Response) {
+        // const { name, crm, telephone, cellphone, cep, specialty } = req.body;
+
+        const usersRepository = getCustomRepository(UsersRepository);
+
+        const users = await usersRepository.find({
+            where: { name:req.params.name }
+        });
+        return res.json(users);
+    }
+
+    // async delete (req: Request, res: Response) {
+    //     // const { name, crm, telephone, cellphone, cep, specialty } = req.body;
+
+    //     const usersRepository = getCustomRepository(UsersRepository);
+
+    //     const users = await usersRepository.softDelete()
+
+    //     return res.json(users);
+    // }
 }
 
 export { UserController };
